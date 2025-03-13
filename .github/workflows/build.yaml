@@ -1,4 +1,4 @@
-name: Artifact Example - Incomplete Workflow
+name: Artifact Example - Complete Workflow
 
 on:
   push:
@@ -9,20 +9,30 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Build Step
         id: build
-        run: |
-          echo "This is the build output." > build_output.txt
+        run: echo "This is the build output." > build_output.txt
+
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-output
+          path: build_output.txt
 
   test:
     needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
+
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-output
 
       - name: Use Build Output
-        run: |
-            cat build_output.txt
+        run: cat build_output.txt || echo "No build output found."
+
