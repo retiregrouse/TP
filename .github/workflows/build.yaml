@@ -1,0 +1,28 @@
+name: Artifact Example - Incomplete Workflow
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Build Step
+        id: build
+        run: |
+          echo "This is the build output." > build_output.txt
+
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Use Build Output
+        run: |
+            cat build_output.txt
